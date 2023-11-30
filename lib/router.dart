@@ -1,320 +1,171 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:poc_navigation/navigation.dart';
+import 'package:poc_navigation/screens/screens.dart';
+import 'package:poc_navigation/screens/second_independent_view.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
-final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
-final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
+part 'router.g.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 final GoRouter goRouter = GoRouter(
-  initialLocation: '/a',
+  initialLocation: const HomeViewRouteData().location,
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
-  routes: [
-    // Stateful nested navigation based on:
-    // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        // the UI shell
-        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
-      },
-      branches: [
-        // first branch (A)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorAKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/a',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de A',
-                  hasLeadingAvatar: true,
-                  body: Center(
-                    child: TextButton(
-                      child: const Text("A route button"),
-                      onPressed: () => context.go("/a/details"),
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de A détails',
-                      body: Center(
-                        child: Text("A details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        // second branch (B)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorBKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/b',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de B',
-                  hasTrailingButtons: true,
-                  body: Center(
-                    child: TextButton(
-                      child: const Text("B to D route button"),
-                      onPressed: () => context.push("/d"),
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de B détails',
-                      body: Center(
-                        child: Text("B details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        // second branch (C)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorCKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/c',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de C',
-                  hasTrailingButtons: true,
-                  hasLeadingAvatar: true,
-                  body: Center(
-                    child: Column(
-                      children: [
-                        TextButton(
-                          child: const Text("C to details"),
-                          onPressed: () => context.go("/c/details"),
-                        ),
-                        TextButton(
-                          child: const Text("C to A route button"),
-                          onPressed: () => context.go("/a"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de C détails',
-                      body: Center(
-                        child: Text("C details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/d',
-      parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (context, state) => const NoTransitionPage(
-        child: CustomScaffold(
-          title: "Appbar de D",
-          background: Colors.green,
-          body: Center(
-            child: Text("D route"),
-          ),
-        ),
-      ),
-    ),
-  ],
+  routes: $appRoutes,
 );
 
-class ScaffoldWithNestedNavigation extends StatelessWidget {
-  const ScaffoldWithNestedNavigation({
-    Key? key,
-    required this.navigationShell,
-  }) : super(key: key ?? const ValueKey('ScaffoldWithNestedNavigation'));
-  final StatefulNavigationShell navigationShell;
+@TypedStatefulShellRoute<MainStatefulShellRouteData>(
+  branches: [
+    // First shell branch
+    TypedStatefulShellBranch<HomeViewShellBranchData>(
+      routes: [
+        // First route of the branch
+        TypedGoRoute<HomeViewRouteData>(
+          path: HomeViewRouteData.path,
+          routes: [
+            // Nested routes
+            TypedGoRoute<HomeDetailViewRouteData>(
+                path: HomeDetailViewRouteData.path),
+          ],
+        )
+      ],
+    ),
+    // Second shell branch
+    TypedStatefulShellBranch<SecondViewShellBranchData>(
+      routes: [
+        // First route of the branch
+        TypedGoRoute<SecondViewRouteData>(
+          path: SecondViewRouteData.path,
+          routes: [
+            // Nested routes
+            TypedGoRoute<SecondDetailViewRouteData>(
+                path: SecondDetailViewRouteData.path),
+          ],
+        )
+      ],
+    ),
+    TypedStatefulShellBranch<ThirdViewShellBranchData>(
+      routes: [
+        TypedGoRoute<ThirdViewRouteData>(
+          path: ThirdViewRouteData.path,
+        )
+      ],
+    ),
+  ],
+)
+class MainStatefulShellRouteData extends StatefulShellRouteData {
+  const MainStatefulShellRouteData();
 
-  void _goBranch(int index) {
-    navigationShell.goBranch(
-      index,
-      // A common pattern when using bottom navigation bars is to support
-      // navigating to the initial location when tapping the item that is
-      // already active. This example demonstrates how to support this behavior,
-      // using the initialLocation parameter of goBranch.
-      initialLocation: index == navigationShell.currentIndex,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      // layout breakpoint: tweak as needed
-      if (constraints.maxWidth < 450) {
-        return ScaffoldWithNavigationBar(
-          body: navigationShell,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
-        );
-      } else {
-        return ScaffoldWithNavigationRail(
-          body: navigationShell,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
-        );
-      }
-    });
-  }
-}
-
-class ScaffoldWithNavigationBar extends StatelessWidget {
-  const ScaffoldWithNavigationBar({
-    super.key,
-    required this.body,
-    required this.selectedIndex,
-    required this.onDestinationSelected,
-  });
-  final Widget body;
-  final int selectedIndex;
-  final ValueChanged<int> onDestinationSelected;
+  static final GlobalKey<NavigatorState> $navigatorKey = _shellNavigatorKey;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        destinations: const [
-          NavigationDestination(label: 'Section A', icon: Icon(Icons.home)),
-          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
-          NavigationDestination(label: 'Section C', icon: Icon(Icons.message)),
-        ],
-        onDestinationSelected: onDestinationSelected,
-      ),
-    );
+  Widget builder(BuildContext context, GoRouterState state,
+      StatefulNavigationShell navigationShell) {
+    return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
   }
 }
 
-class ScaffoldWithNavigationRail extends StatelessWidget {
-  const ScaffoldWithNavigationRail({
-    super.key,
-    required this.body,
-    required this.selectedIndex,
-    required this.onDestinationSelected,
-  });
-  final Widget body;
-  final int selectedIndex;
-  final ValueChanged<int> onDestinationSelected;
+//===============| Home View Shell Branch |===============//
+class HomeViewShellBranchData extends StatefulShellBranchData {
+  const HomeViewShellBranchData();
+}
 
+class HomeViewRouteData extends GoRouteData {
+  static const String path = '/home';
+  const HomeViewRouteData();
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          // Fixed navigation rail on the left (start)
-          NavigationRail(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: onDestinationSelected,
-            labelType: NavigationRailLabelType.all,
-            destinations: const [
-              NavigationRailDestination(
-                label: Text('Section A'),
-                icon: Icon(Icons.home),
-              ),
-              NavigationRailDestination(
-                label: Text('Section B'),
-                icon: Icon(Icons.settings),
-              ),
-              NavigationRailDestination(
-                label: Text('Section C'),
-                icon: Icon(Icons.message),
-              ),
-            ],
-          ),
-          const VerticalDivider(thickness: 1, width: 1),
-          // Main content on the right (end)
-          Expanded(
-            child: body,
-          ),
-        ],
-      ),
-    );
+  Widget build(BuildContext context, GoRouterState state) {
+    return const HomeView();
   }
 }
 
-class CustomScaffold extends StatelessWidget {
-  const CustomScaffold({
-    super.key,
-    required this.title,
-    required this.body,
-    this.hasLeadingAvatar = false,
-    this.hasTrailingButtons = false,
-    this.background,
-  });
+class HomeDetailViewRouteData extends GoRouteData {
+  static const String path = 'detail';
+  const HomeDetailViewRouteData({required this.id});
 
-  final Widget body;
-  final String title;
-  final bool hasLeadingAvatar;
-  final bool hasTrailingButtons;
-  final Color? background;
+  final int id;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      appBar: AppBar(
-        leading: hasLeadingAvatar
-            ? Container(
-                color: Colors.blue,
-                height: 30,
-                width: 30,
-              )
-            : null,
-        backgroundColor: Colors.red,
-        title: Text(title),
-        actions: hasTrailingButtons
-            ? [
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
-                ),
-              ]
-            : [],
-      ),
-      body: body,
-    );
+  Widget build(BuildContext context, GoRouterState state) {
+    return HomeDetailView(id: id);
+  }
+}
+
+//===============| SecondView Shell Branch |===============//
+class SecondViewShellBranchData extends StatefulShellBranchData {
+  const SecondViewShellBranchData();
+}
+
+class SecondViewRouteData extends GoRouteData {
+  static const String path = '/second';
+  const SecondViewRouteData();
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SecondView();
+  }
+}
+
+class SecondDetailViewRouteData extends GoRouteData {
+  static const String path = 'detail';
+  const SecondDetailViewRouteData();
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SecondDetailView();
+  }
+}
+
+//===============| ThirdView Shell Branch |===============//
+class ThirdViewShellBranchData extends StatefulShellBranchData {
+  const ThirdViewShellBranchData();
+}
+
+class ThirdViewRouteData extends GoRouteData {
+  static const String path = '/third';
+  const ThirdViewRouteData();
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ThirdView();
+  }
+}
+
+//===============| NonNested Routes (Routes without navigation bar) |===============//
+
+@TypedGoRoute<IndependentViewRouteData>(
+  path: IndependentViewRouteData.path,
+  routes: [
+    TypedGoRoute<SecondIndependentViewRouteData>(
+        path: SecondIndependentViewRouteData.path)
+  ],
+)
+class IndependentViewRouteData extends GoRouteData {
+  static const String path = '/independent';
+  const IndependentViewRouteData();
+
+  // To remove the bottom bar
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      _rootNavigatorKey;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const IndependentView();
+  }
+}
+
+class SecondIndependentViewRouteData extends GoRouteData {
+  static const String path = 'secondIndependent';
+  const SecondIndependentViewRouteData({required this.id});
+
+  final int id;
+
+  // To remove the bottom bar
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      _rootNavigatorKey;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SecondIndependentView(id: id);
   }
 }
