@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poc_navigation/router.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({
@@ -22,26 +23,31 @@ class CustomScaffold extends StatelessWidget {
       backgroundColor: background,
       appBar: AppBar(
         leading: hasLeadingAvatar
-            ? Container(
-                color: Colors.blue,
-                height: 30,
-                width: 30,
+            ? GestureDetector(
+                onTap: () => const IndependentViewRouteData().push(context),
+                child: const CircleAvatar(
+                  backgroundColor: Color(0xFFcb1d1d),
+                  radius: 25,
+                ),
               )
             : null,
-        backgroundColor: Colors.red,
-        title: Text(title),
+        backgroundColor: const Color(0xFF135d5d),
+        title: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+        ),
         actions: hasTrailingButtons
             ? [
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
+                const Icon(
+                  Icons.newspaper,
+                  color: Colors.white,
+                  size: 15,
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
+                const Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: 15,
                 ),
               ]
             : [],

@@ -40,6 +40,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   }
 }
 
+/// Scaffold with BottomNavigationBar
 class ScaffoldWithNavigationBar extends StatelessWidget {
   const ScaffoldWithNavigationBar({
     super.key,
@@ -58,9 +59,11 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         destinations: const [
-          NavigationDestination(label: 'Section A', icon: Icon(Icons.home)),
-          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
-          NavigationDestination(label: 'Section C', icon: Icon(Icons.message)),
+          // BottomBar's Items
+          NavigationDestination(label: 'HomeView', icon: Icon(Icons.home)),
+          NavigationDestination(label: 'SecondView', icon: Icon(Icons.two_k)),
+          NavigationDestination(
+              label: 'ThirdView', icon: Icon(Icons.three_g_mobiledata)),
         ],
         onDestinationSelected: onDestinationSelected,
       ),
@@ -68,6 +71,7 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
   }
 }
 
+/// Scaffold with left navigation rail
 class ScaffoldWithNavigationRail extends StatelessWidget {
   const ScaffoldWithNavigationRail({
     super.key,

@@ -1,28 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'routes.dart';
+part of 'router.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $myStatefulShellRouteData,
-      $sectionDRoute,
+      $mainStatefulShellRouteData,
+      $independentViewRouteData,
     ];
 
-RouteBase get $myStatefulShellRouteData => StatefulShellRouteData.$route(
-      factory: $MyStatefulShellRouteDataExtension._fromState,
+RouteBase get $mainStatefulShellRouteData => StatefulShellRouteData.$route(
+      factory: $MainStatefulShellRouteDataExtension._fromState,
       branches: [
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/a',
-              factory: $SectionARouteExtension._fromState,
+              path: '/home',
+              factory: $HomeViewRouteDataExtension._fromState,
               routes: [
                 GoRouteData.$route(
                   path: 'detail',
-                  factory: $SectionADetailRouteExtension._fromState,
+                  factory: $HomeDetailViewRouteDataExtension._fromState,
                 ),
               ],
             ),
@@ -31,12 +31,12 @@ RouteBase get $myStatefulShellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/b',
-              factory: $SectionBRouteExtension._fromState,
+              path: '/second',
+              factory: $SecondViewRouteDataExtension._fromState,
               routes: [
                 GoRouteData.$route(
                   path: 'detail',
-                  factory: $SectionBDetailRouteExtension._fromState,
+                  factory: $SecondDetailViewRouteDataExtension._fromState,
                 ),
               ],
             ),
@@ -45,24 +45,25 @@ RouteBase get $myStatefulShellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/c',
-              factory: $SectionCRouteExtension._fromState,
+              path: '/third',
+              factory: $ThirdViewRouteDataExtension._fromState,
             ),
           ],
         ),
       ],
     );
 
-extension $MyStatefulShellRouteDataExtension on MyStatefulShellRouteData {
-  static MyStatefulShellRouteData _fromState(GoRouterState state) =>
-      const MyStatefulShellRouteData();
+extension $MainStatefulShellRouteDataExtension on MainStatefulShellRouteData {
+  static MainStatefulShellRouteData _fromState(GoRouterState state) =>
+      const MainStatefulShellRouteData();
 }
 
-extension $SectionARouteExtension on SectionARoute {
-  static SectionARoute _fromState(GoRouterState state) => const SectionARoute();
+extension $HomeViewRouteDataExtension on HomeViewRouteData {
+  static HomeViewRouteData _fromState(GoRouterState state) =>
+      const HomeViewRouteData();
 
   String get location => GoRouteData.$location(
-        '/a',
+        '/home',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -75,14 +76,14 @@ extension $SectionARouteExtension on SectionARoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SectionADetailRouteExtension on SectionADetailRoute {
-  static SectionADetailRoute _fromState(GoRouterState state) =>
-      SectionADetailRoute(
+extension $HomeDetailViewRouteDataExtension on HomeDetailViewRouteData {
+  static HomeDetailViewRouteData _fromState(GoRouterState state) =>
+      HomeDetailViewRouteData(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
   String get location => GoRouteData.$location(
-        '/a/detail',
+        '/home/detail',
         queryParams: {
           'id': id.toString(),
         },
@@ -98,11 +99,12 @@ extension $SectionADetailRouteExtension on SectionADetailRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SectionBRouteExtension on SectionBRoute {
-  static SectionBRoute _fromState(GoRouterState state) => const SectionBRoute();
+extension $SecondViewRouteDataExtension on SecondViewRouteData {
+  static SecondViewRouteData _fromState(GoRouterState state) =>
+      const SecondViewRouteData();
 
   String get location => GoRouteData.$location(
-        '/b',
+        '/second',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -115,12 +117,12 @@ extension $SectionBRouteExtension on SectionBRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SectionBDetailRouteExtension on SectionBDetailRoute {
-  static SectionBDetailRoute _fromState(GoRouterState state) =>
-      const SectionBDetailRoute();
+extension $SecondDetailViewRouteDataExtension on SecondDetailViewRouteData {
+  static SecondDetailViewRouteData _fromState(GoRouterState state) =>
+      const SecondDetailViewRouteData();
 
   String get location => GoRouteData.$location(
-        '/b/detail',
+        '/second/detail',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -133,11 +135,12 @@ extension $SectionBDetailRouteExtension on SectionBDetailRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SectionCRouteExtension on SectionCRoute {
-  static SectionCRoute _fromState(GoRouterState state) => const SectionCRoute();
+extension $ThirdViewRouteDataExtension on ThirdViewRouteData {
+  static ThirdViewRouteData _fromState(GoRouterState state) =>
+      const ThirdViewRouteData();
 
   String get location => GoRouteData.$location(
-        '/c',
+        '/third',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -150,17 +153,18 @@ extension $SectionCRouteExtension on SectionCRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $sectionDRoute => GoRouteData.$route(
-      path: '/d',
-      parentNavigatorKey: SectionDRoute.$parentNavigatorKey,
-      factory: $SectionDRouteExtension._fromState,
+RouteBase get $independentViewRouteData => GoRouteData.$route(
+      path: '/independent',
+      parentNavigatorKey: IndependentViewRouteData.$parentNavigatorKey,
+      factory: $IndependentViewRouteDataExtension._fromState,
     );
 
-extension $SectionDRouteExtension on SectionDRoute {
-  static SectionDRoute _fromState(GoRouterState state) => const SectionDRoute();
+extension $IndependentViewRouteDataExtension on IndependentViewRouteData {
+  static IndependentViewRouteData _fromState(GoRouterState state) =>
+      const IndependentViewRouteData();
 
   String get location => GoRouteData.$location(
-        '/d',
+        '/independent',
       );
 
   void go(BuildContext context) => context.go(location);
