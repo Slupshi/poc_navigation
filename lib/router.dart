@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:poc_navigation/navigation.dart';
 import 'package:poc_navigation/screens/screens.dart';
+import 'package:poc_navigation/screens/second_independent_view.dart';
 
 part 'router.g.dart';
 
@@ -132,16 +133,39 @@ class ThirdViewRouteData extends GoRouteData {
 
 //===============| NonNested Routes (Routes without navigation bar) |===============//
 
-@TypedGoRoute<IndependentViewRouteData>(path: IndependentViewRouteData.path)
+@TypedGoRoute<IndependentViewRouteData>(
+  path: IndependentViewRouteData.path,
+  routes: [
+    TypedGoRoute<SecondIndependentViewRouteData>(
+        path: SecondIndependentViewRouteData.path)
+  ],
+)
 class IndependentViewRouteData extends GoRouteData {
   static const String path = '/independent';
   const IndependentViewRouteData();
 
+  // To remove the bottom bar
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       _rootNavigatorKey;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const IndependentView();
+  }
+}
+
+class SecondIndependentViewRouteData extends GoRouteData {
+  static const String path = 'secondIndependent';
+  const SecondIndependentViewRouteData({required this.id});
+
+  final int id;
+
+  // To remove the bottom bar
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      _rootNavigatorKey;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SecondIndependentView(id: id);
   }
 }

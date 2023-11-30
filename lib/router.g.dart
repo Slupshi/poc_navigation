@@ -157,6 +157,14 @@ RouteBase get $independentViewRouteData => GoRouteData.$route(
       path: '/independent',
       parentNavigatorKey: IndependentViewRouteData.$parentNavigatorKey,
       factory: $IndependentViewRouteDataExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'secondIndependent',
+          parentNavigatorKey:
+              SecondIndependentViewRouteData.$parentNavigatorKey,
+          factory: $SecondIndependentViewRouteDataExtension._fromState,
+        ),
+      ],
     );
 
 extension $IndependentViewRouteDataExtension on IndependentViewRouteData {
@@ -165,6 +173,30 @@ extension $IndependentViewRouteDataExtension on IndependentViewRouteData {
 
   String get location => GoRouteData.$location(
         '/independent',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SecondIndependentViewRouteDataExtension
+    on SecondIndependentViewRouteData {
+  static SecondIndependentViewRouteData _fromState(GoRouterState state) =>
+      SecondIndependentViewRouteData(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/independent/secondIndependent',
+        queryParams: {
+          'id': id.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
