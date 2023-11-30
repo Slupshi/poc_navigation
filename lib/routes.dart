@@ -73,13 +73,16 @@ class SectionBShellRoute extends StatefulShellBranchData {
 
 class SectionADetailRoute extends GoRouteData {
   static const String path = 'detail';
-  const SectionADetailRoute();
+  const SectionADetailRoute({required this.id});
+
+  final int id;
+
   @override
   Widget build(
     BuildContext context,
     GoRouterState state,
   ) {
-    return const SectionADetail();
+    return SectionADetail(idToto: id);
   }
 }
 

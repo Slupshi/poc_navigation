@@ -77,10 +77,15 @@ extension $SectionARouteExtension on SectionARoute {
 
 extension $SectionADetailRouteExtension on SectionADetailRoute {
   static SectionADetailRoute _fromState(GoRouterState state) =>
-      const SectionADetailRoute();
+      SectionADetailRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
 
   String get location => GoRouteData.$location(
         '/a/detail',
+        queryParams: {
+          'id': id.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);

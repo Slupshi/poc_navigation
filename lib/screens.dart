@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:poc_navigation/custom_scaffold.dart';
+import 'package:poc_navigation/routes.dart';
 
 class SectionA extends StatelessWidget {
   const SectionA({super.key});
@@ -13,7 +14,7 @@ class SectionA extends StatelessWidget {
       body: Center(
         child: TextButton(
           child: const Text("A route button"),
-          onPressed: () => context.go("/a/detail"),
+          onPressed: () => const SectionADetailRoute(id: 456).go(context),
         ),
       ),
     );
@@ -21,13 +22,18 @@ class SectionA extends StatelessWidget {
 }
 
 class SectionADetail extends StatelessWidget {
-  const SectionADetail({super.key});
+  const SectionADetail({
+    required this.idToto,
+    super.key,
+  });
+
+  final int idToto;
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(
-      title: 'Appbar de A détails',
-      body: Center(
+    return CustomScaffold(
+      title: 'Appbar de A détails avec id: $idToto',
+      body: const Center(
         child: Text("A details"),
       ),
     );
@@ -47,15 +53,15 @@ class SectionB extends StatelessWidget {
           children: [
             TextButton(
               child: const Text("b to details"),
-              onPressed: () => context.go("/b/detail"),
+              onPressed: () => const SectionBDetailRoute().go(context),
             ),
             TextButton(
               child: const Text("b to A details"),
-              onPressed: () => context.go("/a/detail"),
+              onPressed: () => const SectionADetailRoute(id: 1234).go(context),
             ),
             TextButton(
               child: const Text("B to D route button"),
-              onPressed: () => context.push("/d"),
+              onPressed: () => const SectionDRoute().push(context),
             ),
           ],
         ),
@@ -96,7 +102,7 @@ class SectionC extends StatelessWidget {
             ),
             TextButton(
               child: const Text("C to A route button"),
-              onPressed: () => context.go("/a"),
+              onPressed: () => const SectionARoute().go(context),
             ),
           ],
         ),
