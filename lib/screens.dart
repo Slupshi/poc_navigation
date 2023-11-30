@@ -13,7 +13,7 @@ class SectionA extends StatelessWidget {
       body: Center(
         child: TextButton(
           child: const Text("A route button"),
-          onPressed: () => context.go("/a/details"),
+          onPressed: () => context.go("/a/detail"),
         ),
       ),
     );
@@ -43,9 +43,21 @@ class SectionB extends StatelessWidget {
       title: 'Appbar de B',
       hasTrailingButtons: true,
       body: Center(
-        child: TextButton(
-          child: const Text("B to D route button"),
-          onPressed: () => context.push("/d"),
+        child: Column(
+          children: [
+            TextButton(
+              child: const Text("b to details"),
+              onPressed: () => context.go("/b/detail"),
+            ),
+            TextButton(
+              child: const Text("b to A details"),
+              onPressed: () => context.go("/a/detail"),
+            ),
+            TextButton(
+              child: const Text("B to D route button"),
+              onPressed: () => context.push("/d"),
+            ),
+          ],
         ),
       ),
     );

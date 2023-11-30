@@ -1,21 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:poc_navigation/navigation.dart';
+import 'package:poc_navigation/router.dart';
 import 'package:poc_navigation/screens.dart';
 
 part 'routes.g.dart';
 
-@TypedGoRoute<SectionARoute>(
-  path: SectionARoute.path,
-  routes: [
-    TypedGoRoute<SectionADetailRoute>(path: SectionADetailRoute.path),
-    TypedGoRoute<SectionBRoute>(path: SectionBRoute.path),
-    TypedGoRoute<SectionBDetailRoute>(path: SectionBDetailRoute.path),
-    TypedGoRoute<SectionCRoute>(path: SectionCRoute.path),
-    TypedGoRoute<SectionDRoute>(path: SectionDRoute.path),
+final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
+
+@TypedStatefulShellRoute<MyStatefulShellRouteData>(
+  branches: <TypedStatefulShellBranch<StatefulShellBranchData>>[
+    TypedStatefulShellBranch<SectionAShellRoute>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<SectionARoute>(
+          path: SectionARoute.path,
+          routes: [
+            TypedGoRoute<SectionADetailRoute>(path: SectionADetailRoute.path),
+          ],
+        )
+      ],
+    ),
+    TypedStatefulShellBranch<SectionBShellRoute>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<SectionBRoute>(
+          path: SectionBRoute.path,
+          routes: [
+            TypedGoRoute<SectionBDetailRoute>(path: SectionBDetailRoute.path),
+          ],
+        )
+      ],
+    ),
+    TypedStatefulShellBranch<SectionCShellRoute>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<SectionCRoute>(
+          path: SectionCRoute.path,
+        )
+      ],
+    ),
   ],
 )
+class MyStatefulShellRouteData extends StatefulShellRouteData {
+  const MyStatefulShellRouteData();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  @override
+  Widget builder(BuildContext context, GoRouterState state,
+      StatefulNavigationShell navigationShell) {
+    return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
+  }
+}
+
+class SectionAShellRoute extends StatefulShellBranchData {
+  const SectionAShellRoute();
+}
+
 class SectionARoute extends GoRouteData {
-  static const String path = '/';
+  static const String path = '/a';
   const SectionARoute();
   @override
   Widget build(
@@ -24,6 +65,10 @@ class SectionARoute extends GoRouteData {
   ) {
     return const SectionA();
   }
+}
+
+class SectionBShellRoute extends StatefulShellBranchData {
+  const SectionBShellRoute();
 }
 
 class SectionADetailRoute extends GoRouteData {
@@ -39,7 +84,7 @@ class SectionADetailRoute extends GoRouteData {
 }
 
 class SectionBRoute extends GoRouteData {
-  static const String path = 'b';
+  static const String path = '/b';
   const SectionBRoute();
   @override
   Widget build(
@@ -51,7 +96,7 @@ class SectionBRoute extends GoRouteData {
 }
 
 class SectionBDetailRoute extends GoRouteData {
-  static const String path = 'b/detail';
+  static const String path = 'detail';
   const SectionBDetailRoute();
   @override
   Widget build(
@@ -62,8 +107,12 @@ class SectionBDetailRoute extends GoRouteData {
   }
 }
 
+class SectionCShellRoute extends StatefulShellBranchData {
+  const SectionCShellRoute();
+}
+
 class SectionCRoute extends GoRouteData {
-  static const String path = 'c';
+  static const String path = '/c';
   const SectionCRoute();
   @override
   Widget build(
@@ -74,9 +123,13 @@ class SectionCRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<SectionDRoute>(path: SectionDRoute.path)
 class SectionDRoute extends GoRouteData {
-  static const String path = 'd';
+  static const String path = '/d';
   const SectionDRoute();
+
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey;
+
   @override
   Widget build(
     BuildContext context,

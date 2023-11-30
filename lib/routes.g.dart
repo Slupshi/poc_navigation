@@ -7,41 +7,62 @@ part of 'routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $sectionARoute,
+      $myStatefulShellRouteData,
+      $sectionDRoute,
     ];
 
-RouteBase get $sectionARoute => GoRouteData.$route(
-      path: '/',
-      factory: $SectionARouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'detail',
-          factory: $SectionADetailRouteExtension._fromState,
+RouteBase get $myStatefulShellRouteData => StatefulShellRouteData.$route(
+      factory: $MyStatefulShellRouteDataExtension._fromState,
+      branches: [
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/a',
+              factory: $SectionARouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'detail',
+                  factory: $SectionADetailRouteExtension._fromState,
+                ),
+              ],
+            ),
+          ],
         ),
-        GoRouteData.$route(
-          path: 'b',
-          factory: $SectionBRouteExtension._fromState,
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/b',
+              factory: $SectionBRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'detail',
+                  factory: $SectionBDetailRouteExtension._fromState,
+                ),
+              ],
+            ),
+          ],
         ),
-        GoRouteData.$route(
-          path: 'b/detail',
-          factory: $SectionBDetailRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'c',
-          factory: $SectionCRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'd',
-          factory: $SectionDRouteExtension._fromState,
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/c',
+              factory: $SectionCRouteExtension._fromState,
+            ),
+          ],
         ),
       ],
     );
+
+extension $MyStatefulShellRouteDataExtension on MyStatefulShellRouteData {
+  static MyStatefulShellRouteData _fromState(GoRouterState state) =>
+      const MyStatefulShellRouteData();
+}
 
 extension $SectionARouteExtension on SectionARoute {
   static SectionARoute _fromState(GoRouterState state) => const SectionARoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/a',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -59,7 +80,7 @@ extension $SectionADetailRouteExtension on SectionADetailRoute {
       const SectionADetailRoute();
 
   String get location => GoRouteData.$location(
-        '/detail',
+        '/a/detail',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -123,6 +144,12 @@ extension $SectionCRouteExtension on SectionCRoute {
 
   void replace(BuildContext context) => context.replace(location);
 }
+
+RouteBase get $sectionDRoute => GoRouteData.$route(
+      path: '/d',
+      parentNavigatorKey: SectionDRoute.$parentNavigatorKey,
+      factory: $SectionDRouteExtension._fromState,
+    );
 
 extension $SectionDRouteExtension on SectionDRoute {
   static SectionDRoute _fromState(GoRouterState state) => const SectionDRoute();
