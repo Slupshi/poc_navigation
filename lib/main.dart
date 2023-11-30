@@ -14,6 +14,7 @@ class MainApp extends StatelessWidget {
       title: 'POC Nav',
       theme: ThemeData(primarySwatch: Colors.blue),
       routerConfig: goRouter,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

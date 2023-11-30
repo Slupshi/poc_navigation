@@ -1,157 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:poc_navigation/routes.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
-final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
-final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
 
 final GoRouter goRouter = GoRouter(
-  initialLocation: '/a',
+  initialLocation: SectionARoute.path,
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
-  routes: [
-    // Stateful nested navigation based on:
-    // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        // the UI shell
-        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
-      },
-      branches: [
-        // first branch (A)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorAKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/a',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de A',
-                  hasLeadingAvatar: true,
-                  body: Center(
-                    child: TextButton(
-                      child: const Text("A route button"),
-                      onPressed: () => context.go("/a/details"),
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de A détails',
-                      body: Center(
-                        child: Text("A details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        // second branch (B)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorBKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/b',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de B',
-                  hasTrailingButtons: true,
-                  body: Center(
-                    child: TextButton(
-                      child: const Text("B to D route button"),
-                      onPressed: () => context.push("/d"),
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de B détails',
-                      body: Center(
-                        child: Text("B details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        // second branch (C)
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorCKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/c',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: CustomScaffold(
-                  title: 'Appbar de C',
-                  hasTrailingButtons: true,
-                  hasLeadingAvatar: true,
-                  body: Center(
-                    child: Column(
-                      children: [
-                        TextButton(
-                          child: const Text("C to details"),
-                          onPressed: () => context.go("/c/details"),
-                        ),
-                        TextButton(
-                          child: const Text("C to A route button"),
-                          onPressed: () => context.go("/a"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'details',
-                  pageBuilder: (context, state) => const NoTransitionPage(
-                    child: CustomScaffold(
-                      title: 'Appbar de C détails',
-                      body: Center(
-                        child: Text("C details"),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/d',
-      parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (context, state) => const NoTransitionPage(
-        child: CustomScaffold(
-          title: "Appbar de D",
-          background: Colors.green,
-          body: Center(
-            child: Text("D route"),
-          ),
-        ),
-      ),
-    ),
-  ],
+  routes: $appRoutes,
 );
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {
@@ -264,57 +121,6 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomScaffold extends StatelessWidget {
-  const CustomScaffold({
-    super.key,
-    required this.title,
-    required this.body,
-    this.hasLeadingAvatar = false,
-    this.hasTrailingButtons = false,
-    this.background,
-  });
-
-  final Widget body;
-  final String title;
-  final bool hasLeadingAvatar;
-  final bool hasTrailingButtons;
-  final Color? background;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      appBar: AppBar(
-        leading: hasLeadingAvatar
-            ? Container(
-                color: Colors.blue,
-                height: 30,
-                width: 30,
-              )
-            : null,
-        backgroundColor: Colors.red,
-        title: Text(title),
-        actions: hasTrailingButtons
-            ? [
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  color: Colors.yellow,
-                  height: 15,
-                  width: 15,
-                ),
-              ]
-            : [],
-      ),
-      body: body,
     );
   }
 }
