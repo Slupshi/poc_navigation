@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
       hasLeadingAvatar: true,
       body: Center(
         child: TextButton(
-          child: const Text("Home to detail route button release 2.2 bis bis"),
+          child: const Text("Home to detail route button retour develop"),
           onPressed: () => const HomeDetailViewRouteData(id: 456).go(context),
         ),
       ),
